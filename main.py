@@ -66,6 +66,11 @@ def attack_and_submit(ip:str):
         print('\033[31mIP:\033[0m',ip,'\033[31mattack failed!\033[0m')
 
 if __name__ == '__main__':
+    if not os.path.exists('info'):               #判断是否存在文件夹如果不存在则创建为文件夹
+		os.makedirs('info')            
+	else:
+		print("---  info has exist  ---")
+    
     # 先是初始化信息部分
     try:
         make_time = os.path.getmtime("info/token.txt")  # 修改时间
