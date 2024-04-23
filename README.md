@@ -1,7 +1,5 @@
 
 
-
-
 ## 省流
 
 按照程序反馈的来，攻击脚本写到 `attack_script.py` 中的 `attack()` 函数里。
@@ -11,6 +9,7 @@
 ```
 ./awd/
 ├── attack_script.py
+├── data_process.py
 ├── fast_ping.py
 ├── file_download.py
 ├── info
@@ -26,9 +25,11 @@
 
 ### 信息初始化与扫描部分
 
- `fast_ping.py` 是用于快速扫描 `ip` 的，可以单独运行，已经设置为交互式，而且增加了目标 `ip` 的显示
+ `fast_ping.py` 用于快速扫描 `ip` 的，可以单独运行，已经设置为交互式，而且增加了目标 `ip` 的显示
 
- `main.py` 用于在开赛前读取是否存在一天以内创建的 `token.txt` 如果不存在或者一天以上，则重新进行交互初始化。
+ `data_process.py` 用于处理已知数据，包括 `alive_ip` 列表，`flag` 列表，`token` 信息等，并根据 `ip` 列表长度决定是否重新扫描。脚本会读取是否存在一天以内创建的 `token.txt` 如果不存在或者一天以上，则重新进行交互初始化
+
+ `main.py` 调用以上函数
 
 然后读取 `alive_ip` 列表，如果 `ip` 数小于等于 `1` 的话重新进行扫描。
 
@@ -55,5 +56,6 @@
 
 
  
+
 
 
