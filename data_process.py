@@ -37,9 +37,12 @@ class Config:  # 这个类用来读取信息
     def __init__(self):
         try:
             make_time = os.path.getmtime("info/token.txt")  # 修改时间
-            if time.time() - make_time > 86400:  # 如果上个文件修改时间超过86400秒，则重新初始化
+            if time.time() - make_time > 43200:  # 如果上个文件修改时间超过43200秒，则重新初始化
                 print('\033[93mWarning: \033[0mThere has been a file but too old, start init')
-                Init()
+                if input('Whether to re-init:(y/n)').lower() == 'y':
+                    Init()
+                else:
+                    os.utime("info/token.txt", (time.time(), time.time()))
             else:
                 print('\033[93mWarning: \033[0mThere has been a file named token.txt ')
         except FileNotFoundError:

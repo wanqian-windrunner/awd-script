@@ -12,6 +12,7 @@
 ├── data_process.py
 ├── fast_ping.py
 ├── file_download.py
+├── flag_submit.py
 ├── info
 │   ├── alive_ips.txt
 │   ├── api.txt
@@ -27,7 +28,7 @@
 
  `fast_ping.py` 用于快速扫描 `ip` 的，可以单独运行，已经设置为交互式，而且增加了目标 `ip` 的显示
 
- `data_process.py` 用于处理已知数据，包括 `alive_ip` 列表，`flag` 列表，`token` 信息等，并根据 `ip` 列表长度决定是否重新扫描。脚本会读取是否存在一天以内创建的 `token.txt` 如果不存在或者一天以上，则重新进行交互初始化
+ `data_process.py` 用于处理已知数据，包括 `alive_ip` 列表，`flag` 列表，`token` 信息等，`Init` 类用于交互初始化存储数据到本地。`Config` 用于读取文件并存储数据，会读取是否存在 `12h` 以外修改的 `token.txt` 询问使用者是否重新进行交互初始化，还根据 `ip` 列表长度决定是否重新扫描。
 
  `main.py` 调用以上函数
 

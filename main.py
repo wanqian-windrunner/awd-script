@@ -14,6 +14,7 @@ if __name__ == '__main__':
         flag_list = pool.map(attack_and_submit, alive_ips)
     flag_list = [flag for flag in flag_list if flag is not None]
 
+    # 之后对于所有的flag进行提交
     if flag_list and api and token:
         with Pool(processes=32) as pool:  # 根据需要设置进程数!!!!!!!
             alive_ips = pool.map(submit, (flag_list, [api for _ in flag_list], [token for _ in flag_list]))
