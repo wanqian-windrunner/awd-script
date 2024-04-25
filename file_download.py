@@ -1,38 +1,65 @@
 import paramiko
 import os
+from data_process import Config
 
-# SSH服务器的信息
-host = 'your_ssh_host'
-port = 2222
-username = 'your_ssh_username'
-password = 'your_ssh_password'
+class ssh_connect:
 
-# 连接SSH服务器
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(host, port, username, password)
+    def __init__(self):
+        config = Config()
+        # SSH服务器的信息
+        self.host = config.host
+        self.port = config.port
+        self.username = config.username
+        self.password = config.password
 
-# 执行打包命令
-stdin, stdout, stderr = ssh.exec_command('tar czf /tmp/html.tar.gz /var/www/html')
+        # 连接SSH服务器
+        self.ssh = paramiko.SSHClient()
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh.connect(self.host, self.port, self.username, self.password)
 
-# 等待命令执行完毕
-stdout.channel.recv_exit_status()
+    # 打包web目录
+    def pack_web(self):
+        self.ssh.exec_command('cd /var/www/html')
+        self.stdin1, self.stdout1, self.stderr1 = self.ssh.exec_command('tar -zcvf /tmp/html.tar.gz *')
+        self.stdout1.channel.recv_exit_status()
+        print(self.stderr1.read().decode())
 
-# 关闭SSH连接
-ssh.close()
+    # 打包home目录
+    def pack_home(self):
+        self.ssh.exec_command('cd /home')
+        self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('tar -zcvf /tmp/pwn.tar.gz *')
+        self.stdout2.channel.recv_exit_status()
+        print(self.stderr2.read().decode())
 
-# 下载打包后的文件
-transport = paramiko.Transport((host, port))
-transport.connect(username=username, password=password)
-sftp = paramiko.SFTPClient.from_transport(transport)
+    def close(self):
+        self.ssh.close()
 
-remote_path = '/tmp/html.tar.gz'
-local_path = 'html.tar.gz'
+class sftp_connect:
+    def __init__(self):
+        config = Config()
+        # SSH服务器的信息
+        self.host = config.host
+        self.port = config.port
+        self.username = config.username
+        self.password = config.password
 
-sftp.get(remote_path, local_path)
-
-# 关闭SFTP连接
-sftp.close()
-transport.close()
-
-print("文件下载完成！")
+        # 连接SFTP服务器
+        self.transport = paramiko.Transport((self.host, self.port))
+        self.transport.connect(username=self.username, password=self.password)
+        self.sftp = paramiko.SFTPClient.from_transport(self.transport)
+    # 下载打包后的文件
+    def download(self):
+        remote_path = '/tmp/html.tar.gz'
+        local_path = 'html.tar.gz'
+        self.sftp.get('/tmp/html.tar.gz', 'html.tar.gz')
+        self.sftp.get('/tmp/pwn.tar.gz', 'pwn.tar.gz')
+        self.sftp.close()
+        self.transport.close()
+        print("文件下载完成！")
+if __name__ == '__main__':
+    ssh = ssh_connect()
+    ssh.pack_web()
+    ssh.pack_home()
+    ssh.close()
+    sftp = sftp_connect()
+    sftp.download()
