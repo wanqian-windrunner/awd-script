@@ -13,6 +13,8 @@ if __name__ == '__main__':
     ssh.pack_home()
     ssh.close()
     sftp = sftp_connect()
+    os.system('del *.tar.gz')
+    print('缓存已清理')
     sftp.download()
 
     # 文件初始化结束，下面读取信息
