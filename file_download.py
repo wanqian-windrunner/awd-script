@@ -54,6 +54,10 @@ class sftp_connect:
         self.sftp.close()
         self.transport.close()
         print("文件下载完成！")
+    def close(self):
+        self.sftp.close()
+        self.transport.close()
+        
 if __name__ == '__main__':
     ssh = ssh_connect()
     ssh.pack_web()
