@@ -27,7 +27,7 @@ class Init:  # 这个类用来初始化信息
             f.write('\n')
             f.write(input('Your password (such as: root)'))
             f.write('\n')
-            f.write(input('Your port (such as: root)'))
+            f.write(input('Your port (such as: 22)'))
             f.write('\n')
         # print(url)
         fast_ping.main_function_to_execute(url)
@@ -57,7 +57,7 @@ class Config:  # 这个类用来读取信息
         self.token = self.read_token()
         if len(self.read_alive_ips()) <= 1:
             print('\033[31mWarning: \033[0mThere is only one ip alive, scaning again!')
-            fast_ping.main_function_to_execute(self.read_alive_ips())
+            fast_ping.main_function_to_execute(self.attack_address.txt)
         self.alive_ips = self.read_alive_ips()
         self.host, self.user, self.passwd, self.port = self.read_ssh_info()
         print('\033[31mConfirm you information: \033[0m\n', 'api:', self.api, '\n', 'token:', self.token, '\n',
