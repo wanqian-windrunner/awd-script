@@ -26,7 +26,7 @@ class ssh_connect:
 
     # 打包home目录
     def pack_home(self):
-        self.ssh.exec_command('cd /home')
+        self.ssh.exec_command('cd ~')
         self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('tar -zcvf /tmp/pwn.tar.gz *')
         self.stdout2.channel.recv_exit_status()
         print(self.stderr2.read().decode())
@@ -44,13 +44,11 @@ class sftp_connect:
         self.password = config.password
 
         # 连接SFTP服务器
-        self.transport = paramiko.Transport((self.host, self.port))
+        self.transport = paramiko.Transport((self.host, int(self.port)))
         self.transport.connect(username=self.username, password=self.password)
         self.sftp = paramiko.SFTPClient.from_transport(self.transport)
     # 下载打包后的文件
     def download(self):
-        remote_path = '/tmp/html.tar.gz'
-        local_path = 'html.tar.gz'
         self.sftp.get('/tmp/html.tar.gz', 'html.tar.gz')
         self.sftp.get('/tmp/pwn.tar.gz', 'pwn.tar.gz')
         self.sftp.close()
