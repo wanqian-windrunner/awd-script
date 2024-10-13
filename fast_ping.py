@@ -12,7 +12,7 @@
 #         alive_ips.append(ip)
 # print(alive_ips)
 
-# 上边的代码是一个单线程的ping扫描，如果一直报错则使用上面的代码，随谈慢，但是稳定
+# 上边的代码是一个单线程的ping扫描，如果一直报错则使用上面的代码，虽然慢，但是稳定
 from multiprocessing import Pool
 from os import system
 
