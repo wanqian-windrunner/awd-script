@@ -60,11 +60,9 @@ class Config:  # 这个类用来读取信息
             fast_ping.main_function_to_execute(self.attack_address)
         self.alive_ips = self.read_alive_ips()
         self.host, self.user, self.passwd, self.port = self.read_ssh_info()
-        print('\033[31mConfirm you information: \033[0m\n', 'api:', self.api, '\n', 'token:', self.token, '\n',
-              'alive_ips:', self.alive_ips, '\n',
-              'attack_address:', self.attack_address, '\n')
-        print('Confirm you information:\n', )
-        print('Your enemy and you:', self.alive_ips, sep='\n')
+        print('\n\033[31mConfirm you information: \033[0m\n', '\033[36mapi\033[0m:', self.api, '\n', '\033[36mtoken\033[0m:', self.token, '\n',
+              '\033[36malive_ips\033[0m:', self.alive_ips, '\n',
+              '\033[36mattack_address\033[0m:', self.attack_address, '\n')
 
     def read_alive_ips(self):
         with open('info/alive_ips.txt', 'r') as f:
@@ -89,4 +87,4 @@ class Config:  # 这个类用来读取信息
     def read_ssh_info(self):
         with open('info/ssh_info.txt', 'r') as f:
             ssh_info = f.readlines()
-        return ssh_info[0], ssh_info[1], ssh_info[2], ssh_info[3]
+        return ssh_info[0].strip(), ssh_info[1].strip(), ssh_info[2].strip(), ssh_info[3].strip()

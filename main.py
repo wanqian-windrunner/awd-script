@@ -8,11 +8,11 @@ if __name__ == '__main__':
     config = Config()
 
     # 然后是下载文件部分
-    ssh = ssh_connect()
+    ssh = ssh_connect(config)
     ssh.pack_web()
     ssh.pack_home()
     ssh.close()
-    sftp = sftp_connect()
+    sftp = sftp_connect(config)
     os.system('del *.tar.gz')
     print('缓存已清理')
     sftp.download()
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     token = config.token
     alive_ips = config.alive_ips
 
-    with Pool(processes=32) as pool:  # 根据需要设置进程数!!!!!!!
+    with Pool(processes=16) as pool:  # 根据需要设置进程数!!!!!!!
         flag_list = pool.map(attack_and_submit, alive_ips)
     flag_list = [flag for flag in flag_list if flag is not None]
 

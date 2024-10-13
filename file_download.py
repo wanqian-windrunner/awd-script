@@ -4,18 +4,19 @@ from data_process import Config
 
 class ssh_connect:
 
-    def __init__(self):
-        config = Config()
+    def __init__(self,config):
+
         # SSH服务器的信息
         self.host = config.host
         self.port = config.port
-        self.username = config.username
-        self.password = config.password
+        self.username = config.user
+        self.password = config.passwd
 
         # 连接SSH服务器
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(self.host, self.port, self.username, self.password)
+        print('\n\nip地址:', self.host, '端口:', self.port, '用户名:', self.username, '密码:', self.password)
+        self.ssh.connect(self.host, int(self.port), self.username, self.password)
 
     # 打包web目录
     def pack_web(self):
@@ -26,7 +27,8 @@ class ssh_connect:
 
     # 打包home目录
     def pack_home(self):
-        self.ssh.exec_command('cd ~')
+        self.ssh.exec_command('cd /home/ctf')
+        print('正在打包 /home/ctf 目录')
         self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('tar -zcvf /tmp/pwn.tar.gz *')
         self.stdout2.channel.recv_exit_status()
         print(self.stderr2.read().decode())
@@ -35,13 +37,13 @@ class ssh_connect:
         self.ssh.close()
 
 class sftp_connect:
-    def __init__(self):
-        config = Config()
+    def __init__(self,config):
+
         # SSH服务器的信息
         self.host = config.host
         self.port = config.port
-        self.username = config.username
-        self.password = config.password
+        self.username = config.user
+        self.password = config.passwd
 
         # 连接SFTP服务器
         self.transport = paramiko.Transport((self.host, int(self.port)))
