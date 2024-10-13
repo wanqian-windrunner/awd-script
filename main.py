@@ -1,10 +1,20 @@
 from multiprocessing import Pool
 from flag_submit import submit, attack_and_submit
 from data_process import Config
+from file_download import *
 
 if __name__ == '__main__':
     # 先是初始化信息部分
     config = Config()
+
+    # 然后是下载文件部分
+    ssh = ssh_connect()
+    ssh.pack_web()
+    ssh.pack_home()
+    ssh.close()
+    sftp = sftp_connect()
+    sftp.download()
+
     # 文件初始化结束，下面读取信息
     api = config.api
     token = config.token
