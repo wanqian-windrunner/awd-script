@@ -8,7 +8,7 @@ class Init:  # 这个类用来初始化信息
         if not os.path.exists('info'):  # 判断是否存在文件夹如果不存在则创建为文件夹
             os.makedirs('info')
         else:
-            print("---  info has exist  ---")
+            print("---  info direction has exist  ---")
         with open("info/api.txt", "w") as f:
             f.write(
                 input('Input your api (such as: https://ctf.bugku.com/pvp/submit.html?token=[token]&flag=[flag]): '))
@@ -36,7 +36,7 @@ class Init:  # 这个类用来初始化信息
 class Config:  # 这个类用来读取信息
     def __init__(self):
         try:
-            make_time = os.path.getmtime("info/token.txt")  # 修改时间
+            make_time = os.path.getmtime("info/ssh_info.txt")  # 修改时间
             if time.time() - make_time > 43200:  # 如果上个文件修改时间超过43200秒，则重新初始化
                 print('\033[93mWarning: \033[0mThere has been a file but too old, start init')
                 if input('Whether to re-init:(y/n)').lower() == 'y':
@@ -44,7 +44,7 @@ class Config:  # 这个类用来读取信息
                 else:
                     os.utime("info/token.txt", (time.time(), time.time()))
             else:
-                print('\033[93mWarning: \033[0mThere has been a file named token.txt ')
+                print('\033[93mWarning: \033[0mThere has been a file named ssh_info.txt ')
         except FileNotFoundError:
             print('\033[93mFile not found\033[0m, start init')
             Init()  # 如果不存在这个文件，则初始化
