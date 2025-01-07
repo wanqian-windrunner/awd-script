@@ -19,20 +19,20 @@
 │   ├── attack_address.txt
 │   └── token.txt
 ├── main.py
-└── 读我读我读我读我读我读我读我读我读我读我读我读我.md
+└── README.md
 ```
 
 ## 说明
 
 ### 信息初始化与扫描部分
 
- `fast_ping.py` 用于快速扫描 `ip` 的，可以单独运行，已经设置为交互式，而且增加了目标 `ip` 的显示
+ `fast_ping.py` 用于快速扫描 `ip` 的，可以单独运行，已经设置为交互式，而且增加了目标 `ip` 的显示，如果攻击目标是真实ip，推荐使用文明中的第三段代码使用fscan扫描
 
  `data_process.py` 用于处理已知数据，包括 `alive_ip` 列表，`flag` 列表，`token` 信息等，`Init` 类用于交互初始化存储数据到本地。`Config` 用于读取文件并存储数据，会读取是否存在 `12h` 以外修改的 `token.txt` 询问使用者是否重新进行交互初始化，还根据 `ip` 列表长度决定是否重新扫描。
 
  `flag_submit.py` 用于调用 `attack()` 函数然后提交 `flag` 。
 
- `file_download.py` 计划自动使用 `ssh` 连接然后使用 `sftp` 下载附件。（TODO）
+ `file_download.py` 自动使用 `ssh` 连接然后使用 `sftp` 下载附件。
 
  `main.py` 多进程调用所有模块，运行时注意电脑最大进程数!!
 
