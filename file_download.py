@@ -21,15 +21,14 @@ class ssh_connect:
     # 打包web目录
     def pack_web(self):
         self.ssh.exec_command('cd /var/www/html')
-        self.stdin1, self.stdout1, self.stderr1 = self.ssh.exec_command('tar -zcvf /tmp/html.tar.gz *')
+        self.stdin1, self.stdout1, self.stderr1 = self.ssh.exec_command('tar -zcvf /tmp/html.tar.gz /var/www/html/*')
         self.stdout1.channel.recv_exit_status()
         print(self.stderr1.read().decode())
 
     # 打包home目录
     def pack_home(self):
-        self.ssh.exec_command('cd /home/ctf')
-        print('正在打包 /home/ctf 目录')
-        self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('tar -zcvf /tmp/pwn.tar.gz *')
+        print('正在复制pwn文件到/tmp目录')
+        self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('cp /home/ctf/pwn /tmp/pwn')
         self.stdout2.channel.recv_exit_status()
         print(self.stderr2.read().decode())
 
@@ -52,7 +51,7 @@ class sftp_connect:
     # 下载打包后的文件
     def download(self):
         self.sftp.get('/tmp/html.tar.gz', 'html.tar.gz')
-        self.sftp.get('/tmp/pwn.tar.gz', 'pwn.tar.gz')
+        self.sftp.get('/tmp/pwn', 'pwn')
         self.sftp.close()
         self.transport.close()
         print("文件下载完成！")

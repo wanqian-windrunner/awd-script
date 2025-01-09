@@ -16,49 +16,52 @@
 # 上边的代码是一个单线程的ping扫描，如果一直报错则使用上面的代码，虽然慢，但是稳定
 ##############################################################################################################
 from multiprocessing import Pool
-from os import system
+import requests
+import threading
 
-def check_ip(ip):
-    result = system('ping -n 1 {} >NUL'.format(ip))
-    if result == 0:
-        return ip
-    return None
 
-def check_ip_signal(ip):
-    result = system('ping {} -n 1'.format(ip))
-    if result == 0:
-        return ip
-    return None
+def check_ip(i):
+    try:
+        url = f'http://{i}' 
+        response = requests.get(url, timeout=0.5)
+        if response.status_code == 200:
+
+            with open('info/alive_ips.txt', 'a+') as f:
+                f.write(f'{i}\n') 
+        else:
+            raise Exception("Not 200 OK")
+    except :
+        pass
 
 def main_function_to_execute(url):
     print('\033[34m Scaning ... \033[0m')
+
+    NUM_THREADS = 256
+
+    threads = []
     ips_to_check = [url.replace('X', str(i)) for i in range(256)]
 
-    with Pool(processes=16) as pool:  # 根据需要设置进程数
-        alive_ips = pool.map(check_ip, ips_to_check)
+    for i in ips_to_check:
+        thread = threading.Thread(target=check_ip, args=(i,))
+        threads.append(thread)
+        thread.start()
 
-    alive_ips = [ip for ip in alive_ips if ip is not None]
-    with open('info/alive_ips.txt', 'w') as f:
-        for i in alive_ips:
-            f.write(i)
-            f.write('\n')
+        if len(threads) >= NUM_THREADS:
+            for t in threads:
+                t.join()
+            threads = []
+
+    for t in threads:
+        t.join()
+
+    with open('info/alive_ips.txt', 'r') as f:
+        alive_ips = f.readlines()
+
     print('\033[34mScan finish, this is alive ips:\033[0m', *alive_ips, sep='\n')
 
 
 if __name__ == '__main__':
-    url = input('input url:')
-    # url = '219.217.199.X'
-    ips_to_check = [url.replace('X', str(i)) for i in range(256)]
-
-    with Pool(processes=32) as pool:  # 根据需要设置进程数
-        alive_ips = pool.map(check_ip_signal, ips_to_check)
-
-    alive_ips = [ip for ip in alive_ips if ip is not None]
-    print(alive_ips)
-    with open('info/alive_ips.txt', 'w') as f:
-        for i in alive_ips:
-            f.write(i)
-            f.write('\n')
+    main_function_to_execute(input())
 
 # 上面是一个多线程 ping 扫描，更推荐用下面的 fscan ，但是仅限于真正的ip地址 
 ##############################################################################################################

