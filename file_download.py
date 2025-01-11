@@ -25,8 +25,8 @@ class ssh_connect:
         self.stdout1.channel.recv_exit_status()
         print(self.stderr1.read().decode())
 
-    # 打包home目录
-    def pack_home(self):
+    # 复制pwn
+    def cp_pwn(self):
         print('正在复制pwn文件到/tmp目录')
         self.stdin2, self.stdout2, self.stderr2 = self.ssh.exec_command('cp /home/ctf/pwn /tmp/pwn')
         self.stdout2.channel.recv_exit_status()
@@ -51,7 +51,9 @@ class sftp_connect:
     # 下载打包后的文件
     def download(self):
         self.sftp.get('/tmp/html.tar.gz', 'html.tar.gz')
+        print('开始下载web附件，请稍等')
         self.sftp.get('/tmp/pwn', 'pwn')
+        print('开始下载web附件，请稍等')
         self.sftp.close()
         self.transport.close()
         print("文件下载完成！")
